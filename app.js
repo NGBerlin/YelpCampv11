@@ -1,7 +1,7 @@
 var express     = require("express"),
     app         = express(),
     bodyParser  = require("body-parser"),
-    mongoose    = require("mongoose"),
+    mongoose    = require("mongodb"),
     flash       = require("connect-flash"),
     passport    = require("passport"),
     LocalStrategy = require("passport-local"),
@@ -15,9 +15,28 @@ var express     = require("express"),
 var commentRoutes    = require("./routes/comments"),
     campgroundRoutes = require("./routes/campgrounds"),
     indexRoutes      = require("./routes/index")
+
+
+const MongoClient = require('mongodb').MongoClient;
+const uri = "mongodb+srv://NGBerlin:NG2321@cluster0.sxp3s.mongodb.net/test?retryWrites=true&w=majority";
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+client.connect(err => {
+  const collection = client.db("test").collection("devices");
+  // perform actions on the collection object
+  client.close();
+});
+
+// mongoose.connect("mongodb://NGBerlin:NG2321@cluster0.sxp3s.mongodb.net/<dbname>?retryWrites=true&w=majority)", {
+// 	useNewUrlParser: true,
+// 	useCreateIndex: true
+// }).then(()	=> {
+// 	console.log('connected to DB')
+// }).catch(err => {
+// 	console.log('ERROR', err.message)
+// })
  
-var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp_v10";
-mongoose.connect(url);
+// var url = process.env.DATABASEURL || "mongodb://localhost/yelp_camp_v10";
+// mongoose.connect(url);
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
@@ -49,7 +68,9 @@ app.use("/", indexRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
 
+app.listen(3000, function(){
+	console.log("server listeningon port 3000")})
 
-app.listen(process.env.PORT, process.env.IP, function(){
-   console.log("The YelpCamp Server Has Started!");
-});
+// app.listen(process.env.PORT, process.env.IP, function(){
+//    console.log("The YelpCamp Server Has Started!");
+// });
