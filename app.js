@@ -19,7 +19,7 @@ var commentRoutes    = require("./routes/comments"),
 
 const MongoClient = require('mongodb').MongoClient;
 const uri = "mongodb+srv://NGBerlin:NG2321@cluster0.sxp3s.mongodb.net/test?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 client.connect(err => {
   const collection = client.db("test").collection("devices");
   // perform actions on the collection object
